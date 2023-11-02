@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class HelloControllerIT {
+public class EventControllerIT {
 
     @Autowired
     private TestRestTemplate template;
@@ -19,8 +19,9 @@ public class HelloControllerIT {
     @Test
     public void getHello() throws Exception {
         String message = "Greetings from Spring Boot!";
-        ResponseEntity<String> response = template.getForEntity("/", String.class);
-        System.out.println(message);
+        ResponseEntity<String> response = template
+                .withBasicAuth("user", "pass123!")
+                .getForEntity("http://localhost:8080/api/v1/test/", String.class);
         assertThat(response.getBody()).isEqualTo(message);
     }
 }
